@@ -8,9 +8,9 @@ import re
 
 MODE_REGEX = re.compile(r'page:\s?(\S*)', re.I)
 
-api = MWApi('http://en.wikipedia.org')
+DEFAULT_HOST = "https://en.wikipedia.org"
 
-def get_config():
+def get_auth_config():
     config_path = os.path.expanduser("~/.mwuppet")
     if os.path.exists(config_path):
         config = load(open(config_path).read())
@@ -21,19 +21,15 @@ def get_config():
                 "password": raw_input("Enter your password: ")
             }
         }
-    print config
     return config
 
-def parse_line(line):
-    match = MODE_REGEX.search(line)
-    if match:
-        return match.group(1)
-    else:
-        return False
+def get_config(path):
+    conf_path = os.path.join(path, 'mwuppet.conf')
+    return load(open(conf_path).read())
 
 def save_page(page, text, summary):
     if not api.is_authenticated:
-        config = get_config()
+        config = get_auth_config()
         api.login(config["user"]["username"], config["user"]["password"])
         api.populateTokens()
 
@@ -43,19 +39,24 @@ def save_page(page, text, summary):
         "text": text,
         "summary": summary,
         "token": api.tokens["edittoken"]
-        })
+    })
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sync code files with a Mediawiki installation")
-    parser.add_argument("--files", nargs="*")
+    parser.add_argument("path")
     parser.add_argument("--message")
 
     args = parser.parse_args()
 
-    for fname in args.files:
-        f = open(fname)
-        firstline = f.readline()
-        page = parse_line(firstline)
-        if(page):
-            save_page(page, f.read(), args.message)
+    if not args.message:
+        args.message = raw_input("Enter comit message: ")
 
+    files = [os.path.join(args.path, name) for name in os.listdir(args.path) if name != "mwuppet.conf"]
+    conf = get_config(args.path)
+
+    api = MWApi(conf.get('host', DEFAULT_HOST))
+
+    for fname in files:
+        f = open(fname)
+        page = conf['prefix'] + os.path.basename(fname)
+        save_page(page, f.read(), args.message)
