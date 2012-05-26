@@ -10,7 +10,10 @@ MODE_REGEX = re.compile(r'page:\s?(\S*)', re.I)
 
 DEFAULT_HOST = "https://en.wikipedia.org"
 
-def get_auth_config():
+api = None
+user_config = None
+
+def get_user_config():
     config_path = os.path.expanduser("~/.mwuppet")
     if os.path.exists(config_path):
         config = load(open(config_path).read())
@@ -23,16 +26,11 @@ def get_auth_config():
         }
     return config
 
-def get_config(path):
+def get_project_config(path):
     conf_path = os.path.join(path, 'mwuppet.conf')
     return load(open(conf_path).read())
 
 def save_page(page, text, summary):
-    if not api.is_authenticated:
-        config = get_auth_config()
-        api.login(config["user"]["username"], config["user"]["password"])
-        api.populateTokens()
-
     print api.post({
         "action": "edit",
         "title": page,
@@ -48,15 +46,22 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    user_config = get_user_config()
+
     if not args.message:
         args.message = raw_input("Enter comit message: ")
 
     files = [os.path.join(args.path, name) for name in os.listdir(args.path) if name != "mwuppet.conf"]
-    conf = get_config(args.path)
+    project_config = get_project_config(args.path)
 
-    api = MWApi(conf.get('host', DEFAULT_HOST))
+    api = MWApi(project_config.get('host', DEFAULT_HOST))
+    api.login(user_config["user"]["username"], user_config["user"]["password"])
+    api.populateTokens()
+
+    project_config['prefix'] = 'User:' + user_config['user']['username'] + '/' + project_config['name'] + '/'
 
     for fname in files:
         f = open(fname)
-        page = conf['prefix'] + os.path.basename(fname)
+        page = project_config['prefix'] + os.path.basename(fname)
+
         save_page(page, f.read(), args.message)
