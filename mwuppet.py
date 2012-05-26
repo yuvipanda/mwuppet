@@ -39,6 +39,11 @@ def save_page(page, text, summary):
         "token": api.tokens["edittoken"]
     })
 
+def preprocess_page_text(page_text, project_config):
+    # Since we only want the prefix right now, let's just do a string replace.
+    # If we do more complicated things here, then time to move to Jinja2
+    return page_text.replace('{{PREFIX}}', project_config['prefix'])
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sync code files with a Mediawiki installation")
     parser.add_argument("path")
@@ -62,6 +67,6 @@ if __name__ == "__main__":
 
     for fname in files:
         f = open(fname)
-        page = project_config['prefix'] + os.path.basename(fname)
-
-        save_page(page, f.read(), args.message)
+        title = project_config['prefix'] + os.path.basename(fname)
+        page_text = preprocess_page_text(f.read(), project_config)
+        save_page(title, page_text, args.message)
