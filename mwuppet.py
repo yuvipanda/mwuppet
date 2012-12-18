@@ -21,7 +21,6 @@ def get_user_config():
                 "password": raw_input("Enter your password: ")
             }
         }
-    print config
     return config
 
 def parse_line(line):
