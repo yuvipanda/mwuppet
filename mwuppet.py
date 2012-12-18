@@ -46,7 +46,7 @@ def save_page(page, text, summary):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sync code files with a Mediawiki installation")
-    parser.add_argument("--files", nargs="*")
+    parser.add_argument("files", nargs="*")
     parser.add_argument("--message", default="/* Updated with mwuppet */")
 
     args = parser.parse_args()
