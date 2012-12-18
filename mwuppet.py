@@ -1,4 +1,4 @@
-# page: User:Yuvipanda/test Booyeah
+#!/usr/bin/env python
 import os
 import argparse
 from mwapi import MWApi
