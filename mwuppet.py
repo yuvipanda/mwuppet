@@ -10,7 +10,7 @@ MODE_REGEX = re.compile(r'page:\s?(\S*)', re.I)
 
 api = MWApi('http://en.wikipedia.org')
 
-def get_config():
+def get_user_config():
     config_path = os.path.expanduser("~/.mwuppet")
     if os.path.exists(config_path):
         config = load(open(config_path).read())
@@ -33,7 +33,7 @@ def parse_line(line):
 
 def save_page(page, text, summary):
     if not api.is_authenticated:
-        config = get_config()
+        config = get_user_config()
         api.login(config["user"]["username"], config["user"]["password"])
         api.populateTokens()
 
@@ -48,7 +48,7 @@ def save_page(page, text, summary):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sync code files with a Mediawiki installation")
     parser.add_argument("--files", nargs="*")
-    parser.add_argument("--message")
+    parser.add_argument("--message", default="/* Updated with mwuppet */")
 
     args = parser.parse_args()
 
