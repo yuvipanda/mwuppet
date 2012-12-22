@@ -17,9 +17,10 @@ def ensure_logged_in():
     if os.path.exists(cookies_path):
         data = load(open(cookies_path).read())
         cookies = data['cookies']
-        tokens = data['tokens']
         api.set_auth_cookie(cookies)
-        if api.validate_login():
+        tokens = api.get_tokens()
+        # This way, we can be sure that we're actually logged in, and the token never really expires!
+        if tokens['edittoken'] != '+\\':
             return
 
     # If it reaches here, that means we don't have a valid login
