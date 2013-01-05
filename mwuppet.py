@@ -3,12 +3,11 @@ import os
 import argparse
 from mwapi import MWApi
 from yaml import load, dump
-import time
 import re
 
 MODE_REGEX = re.compile(r'page:\s?(\S*)', re.I)
 
-api = MWApi('http://en.wikipedia.org')
+api = MWApi('https://en.wikipedia.org')
 tokens = None
 
 def ensure_logged_in():
