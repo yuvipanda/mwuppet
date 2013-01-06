@@ -10,13 +10,16 @@ MODE_REGEX = re.compile(r'page:\s?(\S*)', re.I)
 
 api = MWApi('https://en.wikipedia.org')
 tokens = None
+username = ""
 
 def ensure_logged_in():
     global tokens
+    global username
     cookies_path = os.path.expanduser("~/.mwuppet")
     if os.path.exists(cookies_path):
         data = loads(open(cookies_path).read())
         cookies = data['cookies']
+        username = data['username']
         api.set_auth_cookie(cookies)
         tokens = api.get_tokens()
         # This way, we can be sure that we're actually logged in, and the token never really expires!
@@ -32,7 +35,8 @@ def ensure_logged_in():
     tokens = api.get_tokens()
     open(cookies_path, 'w').write(dumps({
         'tokens': tokens,
-        'cookies': cookies
+        'cookies': cookies,
+        'username': username
     }))
 
 def parse_line(line):
@@ -43,10 +47,12 @@ def parse_line(line):
         return False
 
 def save_page(page, text, summary):
-    if not api.is_authenticated:
-        ensure_logged_in()
-
     print api.post(action="edit", title=page, text=text, summary=summary, token=tokens['edittoken'])
+
+def process(text):
+    global username
+    pattern="{{USERNAME}}"
+    return re.sub(pattern,username,text)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sync code files with a Mediawiki installation")
@@ -54,10 +60,12 @@ if __name__ == "__main__":
     parser.add_argument("--message", default="/* Updated with mwuppet */")
 
     args = parser.parse_args()
+    ensure_logged_in()
 
     for fname in args.files:
         f = open(fname)
-        firstline = f.readline()
+        firstline = process(f.readline())
         page = parse_line(firstline)
+        
         if(page):
-            save_page(page, f.read(), args.message)
+            save_page(page, process(f.read()), args.message)
