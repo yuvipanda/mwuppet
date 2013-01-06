@@ -4,6 +4,7 @@ import argparse
 from mwapi import MWApi
 from yaml import load, dump
 import re
+import getpass
 
 MODE_REGEX = re.compile(r'page:\s?(\S*)', re.I)
 
@@ -24,7 +25,7 @@ def ensure_logged_in():
 
     # If it reaches here, that means we don't have a valid login
     username = raw_input("Enter your username: ")
-    password = raw_input("Enter your password: ")
+    password = getpass.getpass("Enter your password: ")
     api.login(username, password)
     
     cookies = api.get_auth_cookie()
