@@ -2,7 +2,7 @@
 import os
 import argparse
 from mwapi import MWApi
-from yaml import load, dump
+from json import loads, dumps
 import re
 import getpass
 
@@ -15,7 +15,7 @@ def ensure_logged_in():
     global tokens
     cookies_path = os.path.expanduser("~/.mwuppet")
     if os.path.exists(cookies_path):
-        data = load(open(cookies_path).read())
+        data = loads(open(cookies_path).read())
         cookies = data['cookies']
         api.set_auth_cookie(cookies)
         tokens = api.get_tokens()
@@ -30,7 +30,7 @@ def ensure_logged_in():
     
     cookies = api.get_auth_cookie()
     tokens = api.get_tokens()
-    open(cookies_path, 'w').write(dump({
+    open(cookies_path, 'w').write(dumps({
         'tokens': tokens,
         'cookies': cookies
     }))
