@@ -11,7 +11,7 @@ mediawiki_scriptname: MediaWiki userscript that you want to deploy onto the wiki
 
 File Format:
 -------------
-The filename should be in the following format:
+The mediawiki_scriptname should be in the following format:
 
 <pre>
 Page:User:Wiki_username:path
