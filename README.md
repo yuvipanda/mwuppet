@@ -13,6 +13,14 @@ File Format:
 -------------
 The filename should be in the following format:
 
+<pre>
 Page:User:Wiki_username:path
+</pre>
 
 Example: page:User:Yuvipanda/wizard/wizard.js
+
+Now according to the above example, the userscript wizard.js will be deployed to http://en.wikipedia.org/wiki/User:Yuvipanda/wizard/wizard.js
+
+Note:
+-----
+1) Old user of mwuppet, make sure that you delete ~/.mwuppet and try the script.
