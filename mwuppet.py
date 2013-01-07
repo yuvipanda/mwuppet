@@ -5,6 +5,9 @@ from mwapi import MWApi
 from json import loads, dumps
 import re
 import getpass
+from StringIO import StringIO
+from PIL import Image
+import requests
 
 MODE_REGEX = re.compile(r'page:\s?(\S*)', re.I)
 
@@ -47,7 +50,20 @@ def parse_line(line):
         return False
 
 def save_page(page, text, summary):
-    print api.post(action="edit", title=page, text=text, summary=summary, token=tokens['edittoken'])
+    if not api.is_authenticated:
+        ensure_logged_in()
+
+    result = api.post(action="edit", title=page, text=text, summary=summary, token=tokens['edittoken'])
+    print result
+    if 'captcha' in result['edit']:
+        captcha_url = result['edit']['captcha']['url']
+        url = "https://en.wikipedia.org" + captcha_url
+        response = requests.get(url)
+        i = Image.open(StringIO(response.content))
+        i.show()
+        captcha_id = result['edit']['captcha']['id']
+        captcha_word = raw_input("Enter Captcha Word: ")
+        print api.post(action="edit", title=page, text=text, summary=summary, token=tokens['edittoken'],captchaid=captcha_id,captchaword=captcha_word)
 
 def process(text):
     global username

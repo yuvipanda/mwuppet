@@ -1,0 +1,26 @@
+mwuppet is a Mediawiki Userscripts deploy tool. Use it to easily deploy your userscript bundles (JS/CSS/HTML) onto the wiki. Because copy pasting code into an edit box and hitting 'Save Page' sucks.
+
+How to Use:
+-----------
+
+<pre>
+python mwuppet.py mediawiki_scriptname
+</pre>
+
+mediawiki_scriptname: MediaWiki userscript that you want to deploy onto the wiki.
+
+File Format:
+-------------
+The mediawiki_scriptname should be in the following format:
+
+<pre>
+Page:User:Wiki_username:path
+</pre>
+
+Example: page:User:Yuvipanda/wizard/wizard.js
+
+Now according to the above example, the userscript wizard.js will be deployed to http://en.wikipedia.org/wiki/User:Yuvipanda/wizard/wizard.js
+
+Note:
+-----
+1) Old user of mwuppet, make sure that you delete ~/.mwuppet and try the script.
