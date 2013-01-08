@@ -1,5 +1,10 @@
 mwuppet is a Mediawiki Userscripts deploy tool. Use it to easily deploy your userscript bundles (JS/CSS/HTML) onto the wiki. Because copy pasting code into an edit box and hitting 'Save Page' sucks.
 
+Installation:
+-------------
+
+<pre>(pip install | easy_install) python-mwuppet</pre>
+
 How to Use:
 -----------
 
