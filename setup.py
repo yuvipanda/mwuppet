@@ -1,5 +1,4 @@
-from setuptools import setup
-from setuptools import find_packages
+from distutils.core import setup
 setup(
         name="python-mwuppet",
         version="0.0.1",
@@ -10,5 +9,5 @@ setup(
         license="MIT License",
         description = " Mediawiki UserScript Deploy Script",
         long_description = open("README").read(),
-        install_requires = ["mwapi"]
+        install_requires = ["python-mwapi"],
 )
