@@ -3,14 +3,12 @@ mwuppet is a Mediawiki Userscripts deploy tool. Use it to easily deploy your use
 Installation:
 -------------
 
-<pre>(pip install | easy_install) python-mwuppet</pre>
+(pip install | easy_install) python-mwuppet
 
 How to Use:
 -----------
 
-<pre>
 python mwuppet.py mediawiki_scriptname
-</pre>
 
 mediawiki_scriptname: MediaWiki userscript that you want to deploy onto the wiki.
 
@@ -18,9 +16,7 @@ File Format:
 -------------
 The mediawiki_scriptname should be in the following format:
 
-<pre>
 Page:User:Wiki_username:path
-</pre>
 
 Example: page:User:Yuvipanda/wizard/wizard.js
 
