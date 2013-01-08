@@ -1,5 +1,11 @@
 from setuptools import setup
 setup(
+    
+    entry_points = {
+        'console_scripts': [
+            'mwuppet = mwuppet.mwuppet:main',
+        ]
+    },
         name="python-mwuppet",
         version="0.0.3",
         author="Yuvi Panda",
@@ -11,3 +17,4 @@ setup(
         long_description = open("README").read(),
         install_requires = ["python-mwapi"],
 )
+
