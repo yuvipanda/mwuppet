@@ -9,7 +9,7 @@ How to Use:
 -----------
 
 <pre>
-python mwuppet.py mediawiki_scriptname
+mwuppet mediawiki_scriptname
 </pre>
 
 mediawiki_scriptname: MediaWiki userscript that you want to deploy onto the wiki.
