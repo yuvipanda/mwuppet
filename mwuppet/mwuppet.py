@@ -70,7 +70,7 @@ def process(text):
     pattern="{{USERNAME}}"
     return re.sub(pattern,username,text)
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="Sync code files with a Mediawiki installation")
     parser.add_argument("files", nargs="*")
     parser.add_argument("--message", default="/* Updated with mwuppet */")
@@ -85,3 +85,6 @@ if __name__ == "__main__":
         
         if(page):
             save_page(page, process(f.read()), args.message)
+
+if __name__ == "__main__":
+    main()
