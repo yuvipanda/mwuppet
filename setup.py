@@ -9,5 +9,4 @@ setup(
         license="MIT License",
         description = " Mediawiki UserScript Deploy Script",
         long_description = open("README").read(),
-        install_requires = ["python-mwapi"],
 )
