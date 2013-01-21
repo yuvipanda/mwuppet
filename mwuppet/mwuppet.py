@@ -49,6 +49,18 @@ def parse_line(line):
     else:
         return False
 
+def get_page(page, firstline, fname):
+    if not api.is_authenticated:
+        ensure_logged_in()
+    result = api.get(action="parse", page=page, prop="wikitext")
+    wikitext = result["parse"]["wikitext"]["*"]
+    f = open(fname, "w")
+    f.write(firstline)
+    f.write(wikitext.encode("UTF-8"))
+    f.close()
+    print "File " + fname + " updated."
+
+
 def save_page(page, text, summary):
     if not api.is_authenticated:
         ensure_logged_in()
@@ -72,19 +84,28 @@ def process(text):
 
 def main():
     parser = argparse.ArgumentParser(description="Sync code files with a Mediawiki installation")
-    parser.add_argument("files", nargs="*")
-    parser.add_argument("--message", default="/* Updated with mwuppet */")
+    subparsers = parser.add_subparsers(dest="action")
+    
+    parser_push = subparsers.add_parser("push", help="push <filenames>")
+    parser_push.add_argument("files", nargs="*")
+    parser_push.add_argument("--message", default="/* Updated with mwuppet */")
+
+    parser_pull = subparsers.add_parser("pull", help="pull <filenames>")
+    parser_pull.add_argument("files", nargs="*")
 
     args = parser.parse_args()
     ensure_logged_in()
-
+    
     for fname in args.files:
         f = open(fname)
         firstline = process(f.readline())
         page = parse_line(firstline)
-        
-        if(page):
-            save_page(page, process(f.read()), args.message)
+
+        if (page):
+            if args.action == "push":
+                save_page(page, process(f.read()), args.message)
+            elif args.action == "pull":
+                get_page(page, firstline, fname)
 
 if __name__ == "__main__":
     main()

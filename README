@@ -8,9 +8,13 @@ Installation:
 How to Use:
 -----------
 
-mwuppet mediawiki_scriptname
+mwuppet push filename(s)
 
-mediawiki_scriptname: MediaWiki userscript that you want to deploy onto the wiki.
+filename(s): MediaWiki userscripts separated by a space, that you want to deploy onto the wiki.
+
+mwuppet pull filename(s)
+
+filename(s): MediaWiki userscripts separated by a space, that you want to update from the wiki.
 
 File Format:
 -------------
@@ -20,7 +24,7 @@ Page:User:Wiki_username:path
 
 Example: page:User:Yuvipanda/wizard/wizard.js
 
-Now according to the above example, the userscript wizard.js will be deployed to http://en.wikipedia.org/wiki/User:Yuvipanda/wizard/wizard.js
+Now according to the above example, the userscript wizard.js will be deployed to/updated from http://en.wikipedia.org/wiki/User:Yuvipanda/wizard/wizard.js
 
 Note:
 -----
